@@ -16,24 +16,34 @@
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function (obj) {
 	var totalString = "";
-	if (typeof obj === "number" || typeof obj === "boolean") {
+
+	if (typeof obj === "number" || typeof obj === "boolean" || obj === null) {
 		totalString += obj;	
 	}
 	else if (typeof obj === "string") {
 		totalString = "\""+obj+"\"";
 	}
-
-	
-	if (typeof obj === "object") {
-		for (property in obj) {
-			if (typeof property === "string" || typeof property === "number") {
-				totalString += property + ":";
-			}
-			if (typeof obj[property] === "string" || typeof obj[property] === "number") {
-				totalString += obj[property] + ",";
-			}
+	else if (obj instanceof Array) {
+		var metaArray = [];
+		for (var i=0; i<obj.length; i++) {
+			metaArray.push(stringifyJSON(obj[i]));
 		}
+		return "["+metaArray.join(",")+"]";
 	}
+	else {
+		var metaProperty = [];
+		var metaValue = [];
+		var metaCombined = [];
+		for (property in obj) {
+			metaProperty.push(stringifyJSON(property));
+			metaValue.push(stringifyJSON(obj[property]));
+		}
+		for (var j=0; j<metaProperty.length; j++) {
+			metaCombined.push(metaProperty[j]+":"+metaValue[j]);
+		}
+		return "{"+metaCombined.join(",")+"}";
+	}
+
 	return totalString;
 };
 
