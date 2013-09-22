@@ -6,22 +6,18 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function (classname) {
   var where = document.documentElement;
-  
-  var searchChildren = function(location,classname) {
-  	var nodeList = [];
-	var seek = location.children;
-  
-  	for (var i=0; i<seek.length; i++) {
-  		if (seek[i].className.match(classname) !== null) {
-  			nodeList.push(seek[i]);
-  			console.log(seek[i]);
-  		}
-  	}
-  	if (seek.nodeType === 1 && seek.length > 0) {
-  		searchChildren(seek,classname);
-  	}
-	return nodeList;
-  };
-   return searchChildren(where);
+  var nodeList = [];
 
+  var searchChildren = function(location,classname,nodeList) {	
+  	var seek = location.children;
+		if (location.className.split(" ").indexOf(classname) > -1) {
+  			nodeList.push(location);
+    }
+    for (var i=0; i<seek.length; i++) {
+  		searchChildren(seek[i],classname,nodeList);
+    }
+  	return nodeList;
+  };
+  searchChildren(where,classname,nodeList);
+  return nodeList;
 };
