@@ -17,21 +17,16 @@ var parseJSON = function (json) {
 		case "null" : return null;
 		case "true" : return true;
 		case "false" : return false;
-		case (typeof json === "string") : return json.substring(1,json.length-1);
+		case (json.charAt(0) === "[" && json.charAt(json.length-1) === "]") : function() {
+		//the outermost element is an array and can be treated as such. 
+		}
+		case (json.charAt(0) === "{" && json.charAt(json.length-1) === "}") : function() {
+		//the outermost element is an object and can be treated as such
+		}
 		default : return json;
 	}
-// I had intended for the following to chop off the first and last double quotes but length isn't a method even on strings,
-//which JSON inherently are!!
-//	var newString = ""+json.toString();
-//	return newString;
-//	var content = newString.substring(1, newString.length-1); //and this is a goddamned string or I will eat my phone. 
-// 	return content;
 };
 
-
-//	if (json.charAt(0) === "{" && json.charAt(json.length-1) === "}") {
-		//then it's an object and we can start going through it that way
-//	}
 
 // "Hello world",
 // [],
